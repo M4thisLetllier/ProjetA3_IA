@@ -3,16 +3,16 @@ import pandas as pd
 import folium
 from folium.plugins import MarkerCluster, HeatMap
 import warnings
-
+from configuration import DOSSIER_CARTES
 # Désactivation des messages d'avertissement inutiles dans le terminal
 warnings.filterwarnings('ignore')
 
-def main():
+def generation_carte():
     print("=====================================================")
     print(" Démarrage du script - Besoin Client 1 (Cartographie)")
     print("=====================================================")
 
-    file_path = 'IRVE_clean_FINAL.csv'
+    file_path = '../IRVE_clean_FINAL.csv'
     
     # Sécurité : Vérification de la présence de la base de données
     if not os.path.exists(file_path):
@@ -39,6 +39,7 @@ def main():
         'Parking privé réservé à la clientèle': '#9C27B0',
     }
     df['couleur_hex'] = df['implantation_station'].map(COULEURS).fillna('#757575')
+    chemin_modele = os.path.abspath(os.path.join(DOSSIER_CARTES, 'carte_implantations.html'))
 
     # 2. Carte des Clusters
     print("\n2/3 - Génération de la carte des implantations (MarkerCluster)...")
@@ -51,7 +52,7 @@ def main():
             popup=folium.Popup(f"<b>Type :</b> {imp}", max_width=300)
         ).add_to(cluster_moteur)
 
-    carte_clustering.save('carte_implantations.html')
+    carte_clustering.save('carte/carte_implantations.html')
     print("Fichier 'carte_implantations.html' sauvegardé.")
 
     # 3. Carte de Chaleur (Recharge Rapide)
@@ -74,4 +75,4 @@ def main():
     print("=====================================================")
 
 if __name__ == "__main__":
-    main()
+    generation_carte()
