@@ -16,19 +16,19 @@ def main():
     
     # Sécurité : Vérification de la présence de la base de données
     if not os.path.exists(file_path):
-        print(f"❌ Erreur fatale : Le fichier '{file_path}' est introuvable.")
+        print(f"Erreur fatale : Le fichier '{file_path}' est introuvable.")
         print("Veuillez le placer dans le même dossier que ce script.")
         return
 
     # 1. Chargement et Nettoyage
-    print("\n📊 1/3 - Chargement et nettoyage des données géographiques...")
+    print("\n1/3 - Chargement et nettoyage des données géographiques...")
     colonnes_interet = ['nom_station', 'implantation_station', 'lat', 'lon']
     df = pd.read_csv(file_path, usecols=colonnes_interet)
 
     # Nettoyage strict : suppression des NaN et des points hors France métropolitaine
     df = df.dropna(subset=['lat', 'lon'])
     df = df[(df['lat'] >= 41) & (df['lat'] <= 51.5) & (df['lon'] >= -5) & (df['lon'] <= 10)]
-    print(f"✔️ Données prêtes : {df.shape[0]} bornes validées.")
+    print(f"Données prêtes : {df.shape[0]} bornes validées.")
 
     # Attribution de la charte graphique
     COULEURS = {
@@ -41,7 +41,7 @@ def main():
     df['couleur_hex'] = df['implantation_station'].map(COULEURS).fillna('#757575')
 
     # 2. Carte des Clusters
-    print("\n🗺️ 2/3 - Génération de la carte des implantations (MarkerCluster)...")
+    print("\n2/3 - Génération de la carte des implantations (MarkerCluster)...")
     carte_clustering = folium.Map(location=[46.603354, 1.888334], zoom_start=6, tiles='CartoDB Positron')
     cluster_moteur = MarkerCluster(disableClusteringAtZoom=15).add_to(carte_clustering)
 
@@ -52,10 +52,10 @@ def main():
         ).add_to(cluster_moteur)
 
     carte_clustering.save('carte_implantations.html')
-    print("✔️ Fichier 'carte_implantations.html' sauvegardé.")
+    print("Fichier 'carte_implantations.html' sauvegardé.")
 
     # 3. Carte de Chaleur (Recharge Rapide)
-    print("\n🔥 3/3 - Génération de la carte de chaleur (Recharge Rapide)...")
+    print("\n3/3 - Génération de la carte de chaleur (Recharge Rapide)...")
     df_fast = df[df['implantation_station'] == 'Station dédiée à la recharge rapide']
     
     carte_thermique_rapide = folium.Map(location=[46.603354, 1.888334], zoom_start=6, tiles='CartoDB Dark_Matter')
@@ -67,7 +67,7 @@ def main():
     ).add_to(carte_thermique_rapide)
 
     carte_thermique_rapide.save('carte_chaleur_rapide.html')
-    print("✔️ Fichier 'carte_chaleur_rapide.html' sauvegardé.")
+    print("Fichier 'carte_chaleur_rapide.html' sauvegardé.")
 
     print("\n=====================================================")
     print(" OPÉRATION TERMINÉE ! Les livrables HTML sont prêts.")
