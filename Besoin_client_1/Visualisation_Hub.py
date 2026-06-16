@@ -1,7 +1,5 @@
-import sys
 import os
 import webbrowser
-import pandas as pd
 import folium
 from folium.plugins import MarkerCluster, HeatMap
 
