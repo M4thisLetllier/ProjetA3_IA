@@ -73,7 +73,7 @@ def silhouette(coords):
     return meilleur_k,meilleur_score
 
 
-def calinski(coords) :
+def calinski_plushaut(coords) :
     meilleur_score = -1
     meilleur_k = 2
     k_max_test = 187
@@ -93,11 +93,11 @@ def calinski(coords) :
     return meilleur_k,meilleur_score
 
 
-def calinskisaut(coords):
+def calinski(coords):
     score = -1
     meilleur_score = -1
     meilleur_k = 2
-    k_max_test = 200
+    k_max_test =50
     saut= 0
     meilleur_saut=0
 

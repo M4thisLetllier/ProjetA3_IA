@@ -1,8 +1,11 @@
 import sys
 import webbrowser
 import pandas as pd
+
 from Part2_Clusturing.Kmeans_Hub import KmeansPage
 from Part2_Clusturing.DbScan_Hub import DbscanPage
+from Part2_Clusturing.Prediction_hub import PredictionPage
+
 from configuration import creation_dossier
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
                              QSlider, QLabel, QPushButton, QMessageBox, QFrame)
@@ -15,7 +18,7 @@ class MainHub(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Panel d'Analyse des Bornes de Recharge")
-        self.setFixedSize(400, 300)
+        self.setFixedSize(800, 300)
 
         # Simulation chargement données
         self.charger_donnees()
@@ -36,6 +39,11 @@ class MainHub(QWidget):
         self.btn_dbscan.clicked.connect(self.open_dbscan)
         layout.addWidget(self.btn_dbscan)
 
+        self.btn_predict = QPushButton("Ouvrir l'Outil de Prédiction (K-Means)")
+        self.btn_predict.setFixedHeight(50)
+        self.btn_predict.clicked.connect(self.open_prediction)
+        layout.addWidget(self.btn_predict)
+
         footer = QLabel("D'autres analyses seront ajoutées ultérieurement...")
         footer.setStyleSheet("color: gray; font-size: 10px;")
         footer.setAlignment(Qt.AlignCenter)
@@ -54,6 +62,10 @@ class MainHub(QWidget):
     def open_dbscan(self):
         self.db_win = DbscanPage(self.coords, self.df)
         self.db_win.show()
+
+    def open_prediction(self):
+        self.pred_win = PredictionPage(self.coords)
+        self.pred_win.show()
 
 
 if __name__ == "__main__":

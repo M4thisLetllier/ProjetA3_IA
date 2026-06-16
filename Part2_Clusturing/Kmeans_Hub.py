@@ -131,12 +131,13 @@ class KmeansPage(QWidget):
 
     def calculer_meilleur_k_calinski(self):
         """Trouve le meilleur 'k' très rapidement avec l'indice de Calinski-Harabasz."""
+        self.btn_calinski.setText("Calcul en cours...")
         if len(self.coords) < 3:
             QMessageBox.warning(self, "Erreur", "Pas assez de données pour l'analyse.")
             return
 
         # On peut réutiliser le même bouton ou en créer un nouveau dans l'interface
-        self.btn_calinski.setText("Calcul en cours...")
+
         QApplication.processEvents()
 
         meilleur_k ,meilleur_score= calinski(self.coords)
@@ -155,10 +156,11 @@ class KmeansPage(QWidget):
 
     def calculer_meilleur_k_davies(self):
         """Trouve le meilleur 'k' en minimisant l'indice de Davies-Bouldin."""
+        self.btn_davies.setText("Calcul en cours...")
 
         # Si vous ajoutez un bouton dédié, vous pouvez changer son texte ici
         QApplication.processEvents()
-        self.btn_davies.setText("Calcul en cours...")
+
 
         meilleur_k,meilleur_score = davies(self.coords)
 
