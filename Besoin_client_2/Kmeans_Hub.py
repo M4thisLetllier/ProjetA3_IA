@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout,
 import matplotlib.pyplot as plt
 from configuration import DOSSIER_CARTES, DOSSIER_MODELES
 from PyQt5.QtCore import Qt
-from Part2_Clusturing.Kmeans_module import silhouette,calinski,davies, creation_modele_Kmeans,creation_carte_kmeans
+from Besoin_client_2.Kmeans_module import silhouette,calinski,davies, creation_modele_Kmeans,creation_carte_kmeans
 
 
 class KmeansPage(QWidget):

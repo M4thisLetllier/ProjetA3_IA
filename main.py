@@ -2,9 +2,9 @@ import sys
 import webbrowser
 import pandas as pd
 
-from Part2_Clusturing.Kmeans_Hub import KmeansPage
-from Part2_Clusturing.DbScan_Hub import DbscanPage
-from Part2_Clusturing.Prediction_hub import PredictionPage
+from Besoin_client_2.Kmeans_Hub import KmeansPage
+from Besoin_client_2.DbScan_Hub import DbscanPage
+from Besoin_client_2.Prediction_hub import PredictionPage
 
 from configuration import creation_dossier
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
