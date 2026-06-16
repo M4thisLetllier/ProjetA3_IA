@@ -5,6 +5,7 @@ import pandas as pd
 from Besoin_client_2.Kmeans_Hub import KmeansPage
 from Besoin_client_2.DbScan_Hub import DbscanPage
 from Besoin_client_2.Prediction_hub import PredictionPage
+from Besoin_client_1.Visualisation_Hub import VisualisationHub
 
 from configuration import creation_dossier
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
@@ -28,6 +29,11 @@ class MainHub(QWidget):
         title.setStyleSheet("font-size: 18px; font-weight: bold; margin-bottom: 20px;")
         title.setAlignment(Qt.AlignCenter)
         layout.addWidget(title)
+
+        self.btn_visualisation = QPushButton("Ouvrir l'Outil de visualisation")
+        self.btn_visualisation.setFixedHeight(50)
+        self.btn_visualisation.clicked.connect(self.open_visualisation)
+        layout.addWidget(self.btn_visualisation)
 
         self.btn_kmeans = QPushButton("Ouvrir Analyse K-MEANS")
         self.btn_kmeans.setFixedHeight(50)
@@ -54,6 +60,10 @@ class MainHub(QWidget):
     def charger_donnees(self):
         self.df = pd.read_csv("IRVE_clean_FINAL.csv")
         self.coords = self.df[['lon', 'lat']].dropna()
+
+    def open_visualisation(self):
+        self.vs_win = VisualisationHub(self.df)
+        self.vs_win.show()
 
     def open_kmeans(self):
         self.km_win = KmeansPage(self.coords, self.df)
