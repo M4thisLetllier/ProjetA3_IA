@@ -27,7 +27,7 @@ warnings.filterwarnings("ignore")
 # ==============================================================================
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-csv_path = os.path.join(base_dir, "IRVE_clean_FINAL.csv")
+csv_path = os.path.join(base_dir, "../IRVE_clean_FINAL.csv")
 df = pd.read_csv(csv_path, low_memory=False)
 
 # Cible

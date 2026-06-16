@@ -20,7 +20,7 @@ import seaborn as sns
 # 1. CHARGEMENT ET PRÉPARATION DES DONNÉES
 # ==============================================================================
 print("Chargement des données...")
-df = pd.read_csv("Besoin3,4/IRVE_clean_FINAL.csv", low_memory=False)
+df = pd.read_csv("../IRVE_clean_FINAL.csv", low_memory=False)
 
 # Définition de la cible et des variables (issues de ton analyse statistique)
 TARGET = "implantation_station"

@@ -3,7 +3,6 @@
 SCRIPT D'UTILISATION : PRÉDICTION RAPIDE
 Projet IRVE - Besoin Client 3
 ==============================================================================
-À exécuter dans le terminal.
 """
 
 import pandas as pd
