@@ -1,12 +1,10 @@
-import sys
+
 import os
-import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.ticker as mticker
 
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
                              QLabel, QPushButton, QMessageBox, QFrame, QDialog, QTextEdit)
-from PyQt5.QtGui import QPixmap, QFont
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 
 from configuration import DOSSIER_GRAPHE_B4
@@ -169,8 +167,8 @@ class HubJustificationB4(QWidget):
 
         self.setLayout(layout)
 
-    def ouvrir_ou_generer(self, nom_fichier):
-        chemin_absolu = os.path.abspath(os.path.join(self.dossier_graphes, nom_fichier))
+    def ouvrir_ou_generer(self, nom_fichier : str):
+        chemin_absolu = os.path.join(self.dossier_graphes, nom_fichier)
 
         if not os.path.exists(chemin_absolu):
             reponse = QMessageBox.question(

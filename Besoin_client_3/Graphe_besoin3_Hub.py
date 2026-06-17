@@ -173,7 +173,7 @@ class HubJustification(QWidget):
     # LOGIQUE DE GESTION (Vérification -> Génération -> Ouverture)
     # =========================================================================
     def ouvrir_ou_generer(self, nom_fichier : str):
-        chemin_absolu = os.path.abspath(os.path.join(DOSSIER_GRAPHE_B3, nom_fichier))
+        chemin_absolu = os.path.join(DOSSIER_GRAPHE_B3, nom_fichier)
 
         # Si le fichier n'existe pas, on lance la génération de TOUS les graphiques d'un coup
         if not os.path.exists(chemin_absolu):
@@ -241,7 +241,7 @@ class HubJustification(QWidget):
             fig.legend(handles, labels, loc="lower center", ncol=5,
                        bbox_to_anchor=(0.5, -0.08), fontsize=9, title="Type d'implantation")
             plt.tight_layout()
-            plt.savefig(os.path.join(self.dossier_graphes, "graphe_barres_empilees.png"), dpi=100, bbox_inches="tight")
+            plt.savefig(os.path.join(DOSSIER_GRAPHE_B3, "graphe_barres_empilees.png"), dpi=100, bbox_inches="tight")
             plt.close()
 
             # 3. Graphique 2 : Boxplots
@@ -259,7 +259,7 @@ class HubJustification(QWidget):
                     ax.set_title(titre, fontweight="bold")
                     ax.set_xticklabels(order_box, rotation=15, ha="right")
             plt.tight_layout()
-            plt.savefig(os.path.join(self.dossier_graphes, "graphe_boxplots.png"), dpi=100)
+            plt.savefig(os.path.join(DOSSIER_GRAPHE_B3, "graphe_boxplots.png"), dpi=100)
             plt.close()
 
             # 4. Graphique 3 : Variables Catégorielles
@@ -277,7 +277,7 @@ class HubJustification(QWidget):
             fig.legend(handles, labels, loc="lower center", ncol=5,
                        bbox_to_anchor=(0.5, -0.08), fontsize=9, title="Type d'implantation")
             plt.tight_layout()
-            plt.savefig(os.path.join(self.dossier_graphes, "graphe_categoriel.png"), dpi=100, bbox_inches="tight")
+            plt.savefig(os.path.join(DOSSIER_GRAPHE_B3, "graphe_categoriel.png"), dpi=100, bbox_inches="tight")
             plt.close()
 
             # 5. Graphique 4 : Carte Géo (GPS)

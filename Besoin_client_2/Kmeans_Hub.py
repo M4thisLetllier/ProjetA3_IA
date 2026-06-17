@@ -4,9 +4,9 @@ from sklearn.cluster import KMeans
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout,
                              QSlider, QLabel, QPushButton, QMessageBox)
 import matplotlib.pyplot as plt
-from configuration import DOSSIER_CARTES, DOSSIER_MODELES
+from configuration import DOSSIER_CARTES, DOSSIER_MODELES,DOSSIER_GRAPHE
 from PyQt5.QtCore import Qt
-from Besoin_client_2.Kmeans_module import silhouette,calinski,davies, creation_modele_Kmeans,creation_carte_kmeans
+from Besoin_client_2.Kmeans_module import silhouette,calinski_plushaut,davies, creation_modele_Kmeans,creation_carte_kmeans,analyse_globale_kmeans
 
 
 class KmeansPage(QWidget):
@@ -70,6 +70,12 @@ class KmeansPage(QWidget):
         self.btn_inertie.clicked.connect(self.afficher_graphique_inertie)
         self.layout.addWidget(self.btn_inertie)
 
+        # Bonton d'affichage du global
+        self.btn_total = QPushButton("Calculer et afficher le score global")
+        self.btn_total.setStyleSheet("padding: 8px; background-color: #ffc107; color: black;")
+        self.btn_total.clicked.connect(self.kmeanstotal)
+        self.layout.addWidget(self.btn_total)
+
         # Application du layout
         self.setLayout(self.layout)
 
@@ -85,10 +91,8 @@ class KmeansPage(QWidget):
 
         k = self.slider.value()
         nom_fichier = f"carte_kmeans_k{k}.html"
-        chemin_fichier = os.path.join(DOSSIER_CARTES, nom_fichier)
-        chemin_modele = os.path.join(DOSSIER_MODELES, f"modele_kmeans_k{k}.pkl")
-        chemin_absolu_fichier = os.path.abspath(chemin_fichier)
-        chemin_absolu_modele = os.path.abspath(chemin_modele)
+        chemin_absolu_fichier = os.path.join(DOSSIER_CARTES, nom_fichier)
+        chemin_absolu_modele = os.path.join(DOSSIER_MODELES, f"modele_kmeans_k{k}.pkl")
 
         # --- ÉTAPE 1 : GESTION DU MODÈLE ---
         df_kmeans = creation_modele_Kmeans(chemin_absolu_modele, self.coords, k, self.df)
@@ -140,7 +144,7 @@ class KmeansPage(QWidget):
 
         QApplication.processEvents()
 
-        meilleur_k ,meilleur_score= calinski(self.coords)
+        meilleur_k ,meilleur_score= calinski_plushaut(self.coords)
 
         # Mise à jour automatique du curseur
         self.slider.setValue(meilleur_k)
@@ -207,3 +211,11 @@ class KmeansPage(QWidget):
 
         # plt.show() va ouvrir une fenêtre Matplotlib par-dessus votre application PyQt
         plt.show()
+
+    def kmeanstotal(self):
+        score,chemin_image = analyse_globale_kmeans(self.coords, dossier_sauvegarde=DOSSIER_GRAPHE)
+        chemin_absolu = os.path.abspath(chemin_image)
+
+        webbrowser.open('file://' + chemin_absolu)
+
+

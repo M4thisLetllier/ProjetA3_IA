@@ -120,28 +120,28 @@ class HubPrediction(QWidget):
         layout_num = QGridLayout()
 
         layout_num.addWidget(QLabel("Longitude :"), 0, 0)
-        self.spin_lon = QDoubleSpinBox();
-        self.spin_lon.setRange(-10.0, 20.0);
-        self.spin_lon.setDecimals(4);
+        self.spin_lon = QDoubleSpinBox()
+        self.spin_lon.setRange(-10.0, 20.0)
+        self.spin_lon.setDecimals(4)
         self.spin_lon.setValue(4.8320)
         layout_num.addWidget(self.spin_lon, 0, 1)
 
         layout_num.addWidget(QLabel("Latitude :"), 0, 2)
-        self.spin_lat = QDoubleSpinBox();
-        self.spin_lat.setRange(40.0, 55.0);
-        self.spin_lat.setDecimals(4);
+        self.spin_lat = QDoubleSpinBox()
+        self.spin_lat.setRange(40.0, 55.0)
+        self.spin_lat.setDecimals(4)
         self.spin_lat.setValue(45.7640)
         layout_num.addWidget(self.spin_lat, 0, 3)
 
         layout_num.addWidget(QLabel("Puissance (kW) :"), 1, 0)
-        self.spin_puissance = QDoubleSpinBox();
-        self.spin_puissance.setRange(0.0, 500.0);
+        self.spin_puissance = QDoubleSpinBox()
+        self.spin_puissance.setRange(0.0, 500.0)
         self.spin_puissance.setValue(150.0)
         layout_num.addWidget(self.spin_puissance, 1, 1)
 
         layout_num.addWidget(QLabel("Nombre de PDC :"), 1, 2)
-        self.spin_pdc = QSpinBox();
-        self.spin_pdc.setRange(1, 50);
+        self.spin_pdc = QSpinBox()
+        self.spin_pdc.setRange(1, 50)
         self.spin_pdc.setValue(4)
         layout_num.addWidget(self.spin_pdc, 1, 3)
 

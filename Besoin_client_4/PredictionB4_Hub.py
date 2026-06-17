@@ -118,22 +118,22 @@ class HubPredictionPuissance(QWidget):
         layout_num = QGridLayout()
 
         layout_num.addWidget(QLabel("Longitude :"), 0, 0)
-        self.spin_lon = QDoubleSpinBox();
-        self.spin_lon.setRange(-10.0, 20.0);
-        self.spin_lon.setDecimals(4);
+        self.spin_lon = QDoubleSpinBox()
+        self.spin_lon.setRange(-10.0, 20.0)
+        self.spin_lon.setDecimals(4)
         self.spin_lon.setValue(4.8320)
         layout_num.addWidget(self.spin_lon, 0, 1)
 
         layout_num.addWidget(QLabel("Latitude :"), 0, 2)
-        self.spin_lat = QDoubleSpinBox();
-        self.spin_lat.setRange(40.0, 55.0);
-        self.spin_lat.setDecimals(4);
+        self.spin_lat = QDoubleSpinBox()
+        self.spin_lat.setRange(40.0, 55.0)
+        self.spin_lat.setDecimals(4)
         self.spin_lat.setValue(45.7640)
         layout_num.addWidget(self.spin_lat, 0, 3)
 
         layout_num.addWidget(QLabel("Nombre de PDC :"), 1, 0)
-        self.spin_pdc = QSpinBox();
-        self.spin_pdc.setRange(1, 50);
+        self.spin_pdc = QSpinBox()
+        self.spin_pdc.setRange(1, 50)
         self.spin_pdc.setValue(4)
         layout_num.addWidget(self.spin_pdc, 1, 1)
 
@@ -330,23 +330,78 @@ class HubPredictionPuissance(QWidget):
             joblib.dump(best_model, self.chemin_modele)
 
             # 5. Restauration de l'UI
-            self.btn_predire.setText("⚡ Prédire la Puissance Théorique")
+            self.btn_predire.setText("Prédire la Puissance Théorique")
             self.btn_predire.setEnabled(True)
             self.lbl_resultat.setText("Modèle de régression généré avec succès ! Prêt à calculer.")
             QMessageBox.information(self, "Succès", f"Entraînement terminé !\nCoefficient R² du modèle : {r2:.2f}")
             return True
 
         except Exception as e:
-            self.btn_predire.setText("⚡ Prédire la Puissance Théorique")
+            self.btn_predire.setText("Prédire la Puissance Théorique")
             self.btn_predire.setEnabled(True)
             QMessageBox.critical(self, "Erreur fatale", f"L'entraînement a échoué :\n{str(e)}")
             return False
 
     def afficher_graphique(self):
         if not os.path.exists(self.chemin_graphique):
-            QMessageBox.warning(self, "Image introuvable",
-                                "Le graphique n'existe pas encore. Lancer une prédiction va déclencher l'entraînement et la génération du graphique.")
-            return
+            reponse_graphique = QMessageBox.question(
+                    self, "Graphique Introuvable",
+                    "Le graphique de la regression n'existe pas encore. Le chargement du modele et le tracet du graphique vont commencé automatiquement.\nVoulez-vous continuer ?",
+                    QMessageBox.Yes | QMessageBox.No
+                )
+            if reponse_graphique == QMessageBox.Yes:
+                if not os.path.exists(self.chemin_modele):
+                    reponse_modele = QMessageBox.question(
+                        self, "Modèle introuvable",
+                        "Le modèle de Régression n'existe pas encore. L'entraînement va démarrer automatiquement.\nVoulez-vous continuer ?",
+                        QMessageBox.Yes | QMessageBox.No
+                    )
+                    if reponse_modele == QMessageBox.Yes:
+                        succes = self.entrainer_modele()
+                        if not succes:
+                            return
+                    else:
+                        return
+                try:
+                    modele = joblib.load(self.chemin_modele)
+                    y_test = self.df["puissance_nominale"]
+                    # Listes exactes validées par ton script de justification
+                    BOOL_COLS = [
+                        "prise_type_ef", "prise_type_2", "prise_type_combo_ccs",
+                        "prise_type_chademo", "prise_type_autre", "gratuit", "paiement_acte",
+                        "paiement_cb", "paiement_autre", "reservation", "station_deux_roues",
+                        "cable_t2_attache"
+                    ]
+
+                    CAT_COLS = ["condition_acces", "accessibilite_pmr", "implantation_station"]
+
+                    NUM_COLS = ["nbre_pdc", "lon", "lat"]
+
+                    X = self.df[BOOL_COLS + CAT_COLS + NUM_COLS]
+                    y_pred = modele.predict(X)
+                    plt.figure(figsize=(9, 7))
+                    # Tracé des points Réel vs Prédit
+                    plt.scatter(y_test, y_pred, alpha=0.3, color='#185FA5', s=12)
+
+                    # Ajout de la ligne idéale Y = X (Prédiction parfaite)
+                    lims = [min(y_test.min(), y_pred.min()), max(y_test.max(), y_pred.max())]
+                    plt.plot(lims, lims, color='red', linestyle='--', lw=2, label="Prédiction Parfaite (Y = X)")
+
+                    plt.title('Validation du Modèle B4 : Puissance Prédite vs Puissance Réelle', fontsize=12,
+                              fontweight='bold')
+                    plt.xlabel('Valeurs Réelles (kW)', fontsize=10)
+                    plt.ylabel('Valeurs Prédites (kW)', fontsize=10)
+                    plt.legend()
+                    plt.grid(True, alpha=0.3)
+                    plt.gca().spines[['top', 'right']].set_visible(False)
+                    plt.tight_layout()
+
+                    # Sauvegarde du graphique dans le dossier 'besoin4'
+                    plt.savefig(self.chemin_graphique, dpi=150)
+                except Exception as e:
+                    QMessageBox.critical(self, "Erreur", f"Erreur lors de l'ouverture du modele : {str(e)}")
+            else :
+                return
 
         nom_fichier = "graphe_regression_prediction_vs_realite.png"
         self.viewer = ViewerGraphe(self.chemin_graphique, nom_fichier)

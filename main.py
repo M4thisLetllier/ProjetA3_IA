@@ -6,13 +6,12 @@ from Besoin_client_2.Kmeans_Hub import KmeansPage
 from Besoin_client_2.DbScan_Hub import DbscanPage
 from Besoin_client_2.Prediction_hub import PredictionPage
 from Besoin_client_1.Visualisation_Hub import VisualisationHub
-from besoin_client_3.Graphe_besoin3_Hub import HubJustification
-from besoin_client_3.PredictionB3_Hub import HubPrediction
+from Besoin_client_3.Graphe_besoin3_Hub import HubJustification
+from Besoin_client_3.PredictionB3_Hub import HubPrediction
 from Besoin_client_4.graphe_besoin4_hub import  HubJustificationB4
-from Besoin_client_4.prediction import RegressionPage
 from Besoin_client_4.PredictionB4_Hub import HubPredictionPuissance
 
-from configuration import creation_dossier
+from configuration import creation_dossier,DATA_BORNE
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
                              QSlider, QLabel, QPushButton, QMessageBox, QFrame)
 from PyQt5.QtCore import Qt
@@ -112,7 +111,7 @@ class MainHub(QWidget):
         self.setLayout(layout)
 
     def charger_donnees(self):
-        self.df = pd.read_csv("IRVE_clean_FINAL.csv")
+        self.df = pd.read_csv(DATA_BORNE)
         self.coords = self.df[['lon', 'lat']].dropna()
 
     def open_visualisation(self):
