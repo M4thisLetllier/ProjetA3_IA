@@ -7,6 +7,7 @@ from Besoin_client_2.DbScan_Hub import DbscanPage
 from Besoin_client_2.Prediction_hub import PredictionPage
 from Besoin_client_1.Visualisation_Hub import VisualisationHub
 from besoin_client_3.Graphe_besoin3_Hub import HubJustification
+from besoin_client_3.PredictionB3_Hub import HubPrediction
 
 from configuration import creation_dossier
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
@@ -78,12 +79,19 @@ class MainHub(QWidget):
         self.btn_graphe_b3.clicked.connect(self.open_graphe_b3)
         layout.addWidget(self.btn_graphe_b3)
 
+        self.btn_predict_b3 = QPushButton("Ouvrir l'outil de prediction type d'implantation")
+        self.btn_predict_b3.setFixedHeight(50)
+        self.btn_predict_b3.clicked.connect(self.open_predict_b3)
+        layout.addWidget(self.btn_predict_b3)
+
         # ---------------------------
         ## Besoin client 4
         # ---------------------------
         info_b4 = QLabel("Machine Learning Puissance :")
         info_b4.setStyleSheet("color: gray; font-style: italic;")
         layout.addWidget(info_b4)
+
+
 
         footer = QLabel("D'autres analyses seront ajoutées ultérieurement...")
         footer.setStyleSheet("color: gray; font-size: 10px;")
@@ -115,6 +123,10 @@ class MainHub(QWidget):
     def open_graphe_b3(self):
         self.graphe_b3_win = HubJustification(self.df)
         self.graphe_b3_win.show()
+
+    def open_predict_b3(self):
+        self.pred_b3_win = HubPrediction(self.df)
+        self.pred_b3_win.show()
 
 
 if __name__ == "__main__":
