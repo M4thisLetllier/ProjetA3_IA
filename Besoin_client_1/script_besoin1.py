@@ -3,7 +3,6 @@ import pandas as pd
 import folium
 from folium.plugins import MarkerCluster, HeatMap
 import warnings
-from configuration import DOSSIER_CARTES
 
 # Désactivation des messages d'avertissement inutiles dans le terminal
 warnings.filterwarnings('ignore')
@@ -13,7 +12,7 @@ def generation_carte():
     print("  Démarrage du script - Besoin Client 1 (Cartographie)")
     print("=====================================================")
 
-    file_path = '../IRVE_clean_FINAL.csv'
+    file_path = 'IRVE_clean_FINAL.csv'
     
     # Sécurité : Vérification de la présence de la base de données
     if not os.path.exists(file_path):
