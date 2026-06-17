@@ -1,4 +1,3 @@
-import sys
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,6 +8,7 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import Qt
 
+from configuration import DOSSIER_GRAPHE_B3
 # =============================================================================
 # DICTIONNAIRE DES EXPLICATIONS MÉTIER
 # =============================================================================
@@ -79,7 +79,7 @@ class ViewerGraphe(QDialog):
 
     def init_ui(self):
         self.setWindowTitle(self.infos["titre"])
-        self.resize(1000, 650)  # Fenêtre de belle taille
+        self.resize(1400, 650)  # Fenêtre de belle taille
 
         layout_principal = QHBoxLayout()  # Disposition horizontale : Image à gauche, Texte à droite
 
@@ -91,7 +91,7 @@ class ViewerGraphe(QDialog):
         # Chargement et redimensionnement propre de l'image
         pixmap = QPixmap(self.chemin_image)
         # On redimensionne l'image pour qu'elle tienne dans environ 700x600 pixels tout en gardant les proportions
-        pixmap_scale = pixmap.scaled(700, 600, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        pixmap_scale = pixmap.scaled(1100, 600, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.lbl_image.setPixmap(pixmap_scale)
 
         layout_principal.addWidget(self.lbl_image, stretch=7)  # L'image prend 70% de la largeur
@@ -126,9 +126,7 @@ class ViewerGraphe(QDialog):
 class HubJustification(QWidget):
     def __init__(self, df):
         super().__init__()
-        self.dossier_graphes = "./graphe/besoin3"
-        self.fichier_csv = "../IRVE_clean_FINAL.csv"
-        os.makedirs(self.dossier_graphes, exist_ok=True)
+        os.makedirs(DOSSIER_GRAPHE_B3, exist_ok=True)
         self.df = df.copy()
         self.init_ui()
 
@@ -174,8 +172,8 @@ class HubJustification(QWidget):
     # =========================================================================
     # LOGIQUE DE GESTION (Vérification -> Génération -> Ouverture)
     # =========================================================================
-    def ouvrir_ou_generer(self, nom_fichier):
-        chemin_absolu = os.path.abspath(os.path.join(self.dossier_graphes, nom_fichier))
+    def ouvrir_ou_generer(self, nom_fichier : str):
+        chemin_absolu = os.path.abspath(os.path.join(DOSSIER_GRAPHE_B3, nom_fichier))
 
         # Si le fichier n'existe pas, on lance la génération de TOUS les graphiques d'un coup
         if not os.path.exists(chemin_absolu):
@@ -238,8 +236,12 @@ class HubJustification(QWidget):
                     ax.set_xticklabels(["Non (0)", "Oui (1)"], rotation=0)
                     ax.yaxis.set_major_formatter(mticker.PercentFormatter())
                     ax.spines[["top", "right"]].set_visible(False)
+            handles = [plt.Rectangle((0, 0), 1, 1, color=palette.get(l, "#AAA")) for l in ORDER if l in palette]
+            labels = [l for l in ORDER if l in palette]
+            fig.legend(handles, labels, loc="lower center", ncol=5,
+                       bbox_to_anchor=(0.5, -0.08), fontsize=9, title="Type d'implantation")
             plt.tight_layout()
-            plt.savefig(os.path.join(self.dossier_graphes, "graphe_barres_empilees.png"), dpi=100)
+            plt.savefig(os.path.join(self.dossier_graphes, "graphe_barres_empilees.png"), dpi=100, bbox_inches="tight")
             plt.close()
 
             # 3. Graphique 2 : Boxplots
@@ -272,8 +274,10 @@ class HubJustification(QWidget):
                     ax.set_title(col.replace("_", " "), fontweight="bold")
                     ax.set_xticklabels(ax.get_xticklabels(), rotation=20, ha="right", fontsize=8)
                     ax.yaxis.set_major_formatter(mticker.PercentFormatter())
+            fig.legend(handles, labels, loc="lower center", ncol=5,
+                       bbox_to_anchor=(0.5, -0.08), fontsize=9, title="Type d'implantation")
             plt.tight_layout()
-            plt.savefig(os.path.join(self.dossier_graphes, "graphe_categoriel.png"), dpi=100)
+            plt.savefig(os.path.join(self.dossier_graphes, "graphe_categoriel.png"), dpi=100, bbox_inches="tight")
             plt.close()
 
             # 5. Graphique 4 : Carte Géo (GPS)
@@ -294,7 +298,7 @@ class HubJustification(QWidget):
             axes_flat[5].axis('off')
 
             plt.tight_layout()
-            plt.savefig(os.path.join(self.dossier_graphes, "graphe_geo.png"), dpi=100)
+            plt.savefig(os.path.join(DOSSIER_GRAPHE_B3, "graphe_geo.png"), dpi=100)
             plt.close()
 
             return True
