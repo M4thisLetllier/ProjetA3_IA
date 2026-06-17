@@ -9,6 +9,8 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import Qt
 
+from configuration import DOSSIER_GRAPHE_B4
+
 # =============================================================================
 # DICTIONNAIRE DES EXPLICATIONS MÉTIER (BESOIN 4)
 # =============================================================================
@@ -124,8 +126,7 @@ class ViewerGraphe(QDialog):
 class HubJustificationB4(QWidget):
     def __init__(self, df):
         super().__init__()
-        self.dossier_graphes = "./graphe/besoin4"
-        os.makedirs(self.dossier_graphes, exist_ok=True)
+        self.dossier_graphes = DOSSIER_GRAPHE_B4
         self.df = df.copy()
         self.init_ui()
 
