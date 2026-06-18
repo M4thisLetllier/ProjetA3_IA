@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout,QComboBox,
                              QLabel, QPushButton, QMessageBox, QDoubleSpinBox, QFrame, QApplication)
 from PyQt5.QtCore import Qt
 from configuration import DOSSIER_CARTES, DOSSIER_MODELES, COULEURS
-
+from geo_utils import est_en_france  # <-- On importe notre nouvelle fonction
 
 class PredictionPage(QWidget):
     def __init__(self, df_coords):
@@ -41,12 +41,14 @@ class PredictionPage(QWidget):
         line_top.setFrameShape(QFrame.HLine);
         layout.addWidget(line_top)
 
-        # --- Champs de saisie (Longitude / Latitude) ---
+       # --- Champs de saisie (Longitude / Latitude) ---
         form_layout = QHBoxLayout()
         vbox_lon = QVBoxLayout()
         vbox_lon.addWidget(QLabel("Longitude (ex: 2.3522) :"))
         self.input_lon = QDoubleSpinBox()
-        self.input_lon.setRange(-180.0, 180.0)
+        
+        # CHANGEMENT ICI : Limites visuelles pour la France
+        self.input_lon.setRange(-5.0, 9.5)
         self.input_lon.setDecimals(6)
         self.input_lon.setValue(2.3522)
         vbox_lon.addWidget(self.input_lon)
@@ -54,7 +56,9 @@ class PredictionPage(QWidget):
         vbox_lat = QVBoxLayout()
         vbox_lat.addWidget(QLabel("Latitude (ex: 48.8566) :"))
         self.input_lat = QDoubleSpinBox()
-        self.input_lat.setRange(-90.0, 90.0)
+        
+        # CHANGEMENT ICI : Limites visuelles pour la France
+        self.input_lat.setRange(41.3, 51.1)
         self.input_lat.setDecimals(6)
         self.input_lat.setValue(48.8566)
         vbox_lat.addWidget(self.input_lat)
@@ -62,12 +66,6 @@ class PredictionPage(QWidget):
         form_layout.addLayout(vbox_lon)
         form_layout.addLayout(vbox_lat)
         layout.addLayout(form_layout)
-
-        # --- Bouton de Prédiction ---
-        self.btn_predire = QPushButton("Prédire le Secteur")
-        self.btn_predire.setStyleSheet("background-color: #28a745; color: white; padding: 10px; font-weight: bold;")
-        self.btn_predire.clicked.connect(self.faire_prediction)
-        layout.addWidget(self.btn_predire)
 
         # --- Affichage du Résultat ---
         self.lbl_resultat = QLabel("En attente de prédiction...")
@@ -147,8 +145,23 @@ class PredictionPage(QWidget):
     def faire_prediction(self):
         if self.model is None: return
 
-        self.last_lon = self.input_lon.value()
-        self.last_lat = self.input_lat.value()
+        # On récupère les valeurs des cases de saisie
+        lon = self.input_lon.value()
+        lat = self.input_lat.value()
+
+        # --- AJOUT DE LA VÉRIFICATION PRÉCISE ---
+        if not est_en_france(lon, lat):
+            QMessageBox.warning(
+                self, 
+                "Coordonnées hors de France", 
+                "Les coordonnées saisies ne se trouvent pas sur le territoire français métropolitain.\n"
+                "Veuillez vérifier votre saisie."
+            )
+            return  # On arrête la fonction ici, la prédiction ne se lance pas
+
+        # Si c'est valide, le code d'origine s'exécute normalement :
+        self.last_lon = lon
+        self.last_lat = lat
 
         prediction = self.model.predict([[self.last_lon, self.last_lat]])
         self.predicted_cluster = int(prediction[0])
