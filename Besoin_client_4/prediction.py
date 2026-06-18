@@ -1,6 +1,6 @@
 import os
 import numpy as np
-import joblib  # Pour charger le fichier .pkl
+import joblib
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QTextEdit
 from PyQt5.QtCore import Qt
 

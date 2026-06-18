@@ -15,7 +15,7 @@ class PredictionPage(QWidget):
     def __init__(self, df_coords):
         super().__init__()
         self.coords = df_coords
-        self.k_cible = 6  # Le modèle conseillé par défaut
+        self.k_cible = 5  # Le modèle conseillé par défaut
         self.model = None
         self.init_ui()
         self.lister_et_charger_modeles()
@@ -37,8 +37,8 @@ class PredictionPage(QWidget):
         self.combo_modeles.currentIndexChanged.connect(self.changer_modele)
         layout.addWidget(self.combo_modeles)
 
-        line_top = QFrame();
-        line_top.setFrameShape(QFrame.HLine);
+        line_top = QFrame()
+        line_top.setFrameShape(QFrame.HLine)
         layout.addWidget(line_top)
 
        # --- Champs de saisie (Longitude / Latitude) ---
@@ -73,8 +73,8 @@ class PredictionPage(QWidget):
         self.lbl_resultat.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.lbl_resultat)
 
-        line_bot = QFrame();
-        line_bot.setFrameShape(QFrame.HLine);
+        line_bot = QFrame()
+        line_bot.setFrameShape(QFrame.HLine)
         layout.addWidget(line_bot)
 
         # --- Bouton d'affichage Carte ---

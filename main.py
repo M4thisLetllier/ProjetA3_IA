@@ -6,10 +6,12 @@ from Besoin_client_2.Kmeans_Hub import KmeansPage
 from Besoin_client_2.DbScan_Hub import DbscanPage
 from Besoin_client_2.Prediction_hub import PredictionPage
 from Besoin_client_1.Visualisation_Hub import VisualisationHub
-from besoin_client_3.Graphe_besoin3_Hub import HubJustification
-from besoin_client_3.PredictionB3_Hub import HubPrediction
+from Besoin_client_3.Graphe_besoin3_Hub import HubJustification
+from Besoin_client_3.PredictionB3_Hub import HubPrediction
+from Besoin_client_4.graphe_besoin4_hub import  HubJustificationB4
+from Besoin_client_4.PredictionB4_Hub import HubPredictionPuissance
 
-from configuration import creation_dossier
+from configuration import creation_dossier,DATA_BORNE
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
                              QSlider, QLabel, QPushButton, QMessageBox, QFrame)
 from PyQt5.QtCore import Qt
@@ -91,7 +93,15 @@ class MainHub(QWidget):
         info_b4.setStyleSheet("color: gray; font-style: italic;")
         layout.addWidget(info_b4)
 
+        self.btn_graphe_b4 = QPushButton("Ouvrir la justification du choix des variables")
+        self.btn_graphe_b4.setFixedHeight(50)
+        self.btn_graphe_b4.clicked.connect(self.open_graphe_b4)
+        layout.addWidget(self.btn_graphe_b4)
 
+        self.btn_predict_b4 = QPushButton("Ouvrir l'outil de prediction de la puissance")
+        self.btn_predict_b4.setFixedHeight(50)
+        self.btn_predict_b4.clicked.connect(self.open_predict_b4)
+        layout.addWidget(self.btn_predict_b4)
 
         footer = QLabel("D'autres analyses seront ajoutées ultérieurement...")
         footer.setStyleSheet("color: gray; font-size: 10px;")
@@ -101,7 +111,7 @@ class MainHub(QWidget):
         self.setLayout(layout)
 
     def charger_donnees(self):
-        self.df = pd.read_csv("IRVE_clean_FINAL.csv")
+        self.df = pd.read_csv(DATA_BORNE)
         self.coords = self.df[['lon', 'lat']].dropna()
 
     def open_visualisation(self):
@@ -127,6 +137,14 @@ class MainHub(QWidget):
     def open_predict_b3(self):
         self.pred_b3_win = HubPrediction(self.df)
         self.pred_b3_win.show()
+
+    def open_graphe_b4(self):
+        self.graphe_b4_win = HubJustificationB4(self.df)
+        self.graphe_b4_win.show()
+
+    def open_predict_b4(self):
+        self.pred_b4_win = HubPredictionPuissance(self.df)
+        self.pred_b4_win.show()
 
 
 if __name__ == "__main__":

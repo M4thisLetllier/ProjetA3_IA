@@ -7,8 +7,8 @@ import folium
 from sklearn.cluster import DBSCAN
 
 from configuration import DOSSIER_CARTES, DOSSIER_MODELES, COULEURS
-from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
-                             QSlider, QLabel, QPushButton, QMessageBox, QFrame)
+from PyQt5.QtWidgets import ( QWidget, QVBoxLayout,
+                             QSlider, QLabel, QPushButton)
 from PyQt5.QtCore import Qt
 
 
@@ -52,8 +52,8 @@ class DbscanPage(QWidget):
 
     def open_map(self):
         eps_km = self.slider.value() * 10
-        chemin_filename = os.path.abspath(os.path.join(DOSSIER_CARTES, f"carte_dbscan_eps{eps_km}.html"))
-        chemin_modele = os.path.abspath(os.path.join(DOSSIER_MODELES, f"modele_dbscan_eps{eps_km}.pkl"))
+        chemin_filename = os.path.join(DOSSIER_CARTES, f"carte_dbscan_eps{eps_km}.html")
+        chemin_modele = os.path.join(DOSSIER_MODELES, f"modele_dbscan_eps{eps_km}.pkl")
 
         if not os.path.exists(chemin_modele):
             eps_rad = eps_km / 6371.0

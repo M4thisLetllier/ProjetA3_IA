@@ -97,7 +97,7 @@ class VisualisationHub(QWidget):
     # =========================================================
     def gerer_carte_implantations(self):
         nom_fichier = "carte_implantations.html"
-        chemin_absolu = os.path.abspath(os.path.join(DOSSIER_CARTES, nom_fichier))
+        chemin_absolu = os.path.join(DOSSIER_CARTES, nom_fichier)
 
         if not os.path.exists(chemin_absolu):
             self.btn_implantations.setText("Génération en cours...")
@@ -120,7 +120,7 @@ class VisualisationHub(QWidget):
 
     def gerer_carte_chaleur_rapide(self):
         nom_fichier = "carte_chaleur_rapide.html"
-        chemin_absolu = os.path.abspath(os.path.join(DOSSIER_CARTES, nom_fichier))
+        chemin_absolu = os.path.join(DOSSIER_CARTES, nom_fichier)
 
         if not os.path.exists(chemin_absolu):
             self.btn_chaleur_rap.setText("Génération en cours...")
@@ -142,7 +142,7 @@ class VisualisationHub(QWidget):
 
     def gerer_carte_chaleur_globale(self):
         nom_fichier = "carte_chaleur_globale.html"
-        chemin_absolu = os.path.abspath(os.path.join(DOSSIER_CARTES, nom_fichier))
+        chemin_absolu = os.path.join(DOSSIER_CARTES, nom_fichier)
 
         if not os.path.exists(chemin_absolu):
             self.btn_chaleur_glob.setText("Génération en cours...")
@@ -166,7 +166,7 @@ class VisualisationHub(QWidget):
     # =========================================================
     def ouvrir_image(self, nom_image : str):
         """Ouvre une image PNG avec la visionneuse par défaut de l'OS."""
-        chemin_absolu = os.path.abspath(os.path.join(DOSSIER_GRAPHE, nom_image))
+        chemin_absolu = os.path.join(DOSSIER_GRAPHE, nom_image)
 
         if os.path.exists(chemin_absolu):
             # QDesktopServices ouvre le fichier avec le programme par défaut de Windows/Mac/Linux
